@@ -1,0 +1,21 @@
+{
+  "name": "street-vision",
+  "version": "1.0.0",
+  "description": "An application to see traffic calamities in real-time",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "start:watch": "./node_modules/.bin/nodemon --inspect=0.0.0.0:5858 src src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "graphql-yoga": "^1.18.3",
+    "prisma-client-lib": "^1.34.10"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.1"
+  }
+}
+

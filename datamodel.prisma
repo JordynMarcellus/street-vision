@@ -1,0 +1,19 @@
+type User {
+  id: ID! @id
+  name: String!
+}
+
+enum EncounterType {
+  BOX_BLOCK
+  RUN_RED
+  SPEED_THROUGH
+}
+
+type Encounter {
+  id: ID! @id
+  type: EncounterType!
+  lat: Float!
+  lng: Float!
+  readable: String
+  reportedOn: DateTime! @createdAt
+}

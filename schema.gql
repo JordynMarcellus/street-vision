@@ -1,0 +1,26 @@
+type Query {
+  encounters: [Encounter!]!
+}
+
+enum EncounterType {
+  BOX_BLOCK
+  RUN_RED
+  SPEED_THROUGH
+}
+
+type geoLocation {
+  lat: Float!
+  lng: Float!
+}
+
+type Address {
+  geoLocation: geoLocation!
+  readable: String
+}
+
+type Encounter {
+  id: String!
+  type: EncounterType!
+  address: Address!
+  reportedOn: String!
+}
