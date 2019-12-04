@@ -6,7 +6,6 @@ exports.rootReducer = {
   },
   Encounter: {
     address: (root, args, context) => {
-      console.log(root);
       return {
         geoLocation: {
           lat: root.lat,
