@@ -7,6 +7,21 @@ type Query {
   encounters: [Encounter!]!
 }
 
+type Mutation { 
+  reportEncounter(encounter: ReportEncounterInput!): Encounter!
+}
+
+input ReportEncounterInput {
+  type: EncounterType!
+  address: AddressInput!
+}
+
+input AddressInput {
+  lat: Float!
+  lng: Float!
+  readable: String
+}
+
 enum EncounterType {
   BOX_BLOCK
   RUN_RED
