@@ -4,7 +4,7 @@
   "description": "An application to see traffic calamities in real-time",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node src/index.js",
     "start:watch": "./node_modules/.bin/nodemon --inspect=0.0.0.0:5858 src src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,4 +18,3 @@
     "nodemon": "^2.0.1"
   }
 }
-
