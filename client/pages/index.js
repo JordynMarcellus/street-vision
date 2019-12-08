@@ -3,50 +3,29 @@ import Head from "next/head";
 import withData from "../lib/withData";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
+import * as queries from "../state/queries";
+import * as mmutations from "../state/mutations";
 import { usePosition } from "../state/usePosition";
 
-const REPORT_ENCOUNTER = gql`
-  mutation reportEncounter($type: EncounterType!, $address: AddressInput!) {
-    reportEncounter(encounter: { type: $type, address: $address }) {
-      id
-    }
-  }
-`;
-
-const GET_ENCOUNTERS = gql`
-  # query AllEncounters {
-  #   encounters {
-  #     id
-  #     type
-  #     address {
-  #       geoLocation {
-  #         lat
-  #         lng
-  #       }
-  #       readable
-  #     }
-  #     reportedOn
-  #   }
-  # }
-  query GetReportEnums {
-    __type(name: "EncounterType") {
-      name
-      enumValues {
-        name
-      }
-    }
-  }
-`;
+// const UPDATE_TODO = gql`
+//   mutation UpdateTodo($id: String!, $type: String!) {
+//     updateTodo(id: $id, type: $type) {
+//       id
+//       type
+//     }
+//   }
+// `;
 
 const Home = props => {
-  const { loading, error, data } = useQuery(GET_ENCOUNTERS);
-  const [reportEncounterFn, otherStuff] = useMutation(REPORT_ENCOUNTER);
+  const { loading, error, data } = useQuery(queries.GET_REPORT_TYPES);
+  const [
+    reportEncounterFn,
+    { error: mutationError, data: mutationData },
+  ] = useMutation(mmutations.REPORT_ENCOUNTER);
   const { lat, lng, error: geoError } = usePosition();
   const [reportState, setReportState] = useState({
-    type: "",
+    type: "RUN_RED",
   });
-  console.log(lat, lng);
-  console.log(otherStuff);
   return (
     <div>
       <Head>
@@ -57,24 +36,29 @@ const Home = props => {
         <form
           onSubmit={e => {
             e.preventDefault();
-            reportEncounterFn({
-              variables: {
-                type: reportState.type,
-                address: {
-                  lat,
-                  lng,
-                },
+            const variables = {
+              type: reportState.type,
+              address: {
+                lat,
+                lng,
               },
+            };
+            reportEncounterFn({
+              variables,
             });
           }}>
-          <select onChange={e => setReportState({ type: e.target.value })}>
-            {data.__type.enumValues.map(({ name }, index) => (
-              <option key={`${name}--${index}`} value={name}>
-                {name}
-              </option>
-            ))}
+          <select
+            onChange={e => setReportState({ type: e.target.value })}
+            value={reportState.type}>
+            {data.__type.enumValues.map(({ name }, index) => {
+              return (
+                <option key={`${name}--${index}`} value={name}>
+                  {name}
+                </option>
+              );
+            })}
           </select>
-          <button onClick={reportEncounterFn}>Click to report</button>
+          <button type="submit">Click to report</button>
         </form>
       )}
       <p>

@@ -30,7 +30,6 @@ export const usePosition = () => {
       if (!deviceGeoLocation) {
         return setError("Cannot access geolocation");
       }
-      console.log("bomb's away");
       await promisifiedGeoLocation()
         .then(({ coords }) => onChange({ coords }))
         .catch(error => onError(error));
