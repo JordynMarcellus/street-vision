@@ -1,10 +1,14 @@
 import React from "react";
 import NextApp from "next/app";
-import { ThemeProvider } from "styled-components";
-
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 const theme = {
   primary: "green",
 };
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #f1f1f1
+  }
+`;
 
 export default class App extends NextApp {
   render() {
@@ -12,6 +16,7 @@ export default class App extends NextApp {
 
     return (
       <ThemeProvider theme={theme}>
+        <GlobalStyle />
         <Component {...pageProps} />
       </ThemeProvider>
     );
