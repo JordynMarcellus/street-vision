@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as FormStyles from "./styles";
 import * as mutations from "../../state/mutations";
 import { usePosition } from "../../state/usePosition";
 import { useMutation } from "@apollo/react-hooks";
@@ -8,13 +9,12 @@ export const Form = ({ options }) => {
     reportEncounterFn,
     { error: mutationError, data: mutationData },
   ] = useMutation(mutations.REPORT_ENCOUNTER);
-  const { lat, lng, error: geoError } = usePosition();
   const [reportState, setReportState] = useState({
     type: "RUN_RED",
   });
 
   return (
-    <form
+    <FormStyles.Container
       onSubmit={e => {
         e.preventDefault();
         const variables = {
@@ -28,7 +28,7 @@ export const Form = ({ options }) => {
           variables,
         });
       }}>
-      <select
+      <FormStyles.StyledSelect
         onChange={e => setReportState({ type: e.target.value })}
         value={reportState.type}>
         {options.map(({ name }, index) => {
@@ -38,8 +38,8 @@ export const Form = ({ options }) => {
             </option>
           );
         })}
-      </select>
-      <button>Click to report</button>
-    </form>
+      </FormStyles.StyledSelect>
+      <FormStyles.Button>Click to report</FormStyles.Button>
+    </FormStyles.Container>
   );
 };

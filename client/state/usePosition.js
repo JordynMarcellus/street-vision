@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 
+// Is this the right kind of hook?
+// NEED
+
 const promisifiedGeoLocation = () =>
   new Promise((resolve, reject) => {
     return navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -24,18 +27,15 @@ export const usePosition = () => {
     console.log(error);
     setError(error.message);
   };
-  useEffect(() => {
-    async function getPos() {
-      const deviceGeoLocation = navigator.geolocation;
-      if (!deviceGeoLocation) {
-        return setError("Cannot access geolocation");
-      }
-      await promisifiedGeoLocation()
-        .then(({ coords }) => onChange({ coords }))
-        .catch(error => onError(error));
-    }
-    getPos();
-  }, []);
 
-  return { ...position, error };
+  const getPosition = async () => {
+    const deviceGeoLocation = navigator.geolocation;
+    if (!deviceGeoLocation) {
+      return setError("Cannot access geolocation");
+    }
+    await promisifiedGeoLocation()
+      .then(({ coords }) => onChange({ coords }))
+      .catch(error => onError(error));
+  };
+  return { ...position, getPosition, error };
 };
