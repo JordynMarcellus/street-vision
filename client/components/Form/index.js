@@ -1,18 +1,18 @@
 import React, { useState } from "react";
+import { useMutation } from "@apollo/react-hooks";
 import * as FormStyles from "./styles";
 import * as mutations from "../../state/mutations";
 import { usePosition } from "../../state/usePosition";
-import { useMutation } from "@apollo/react-hooks";
-
 export const Form = ({ options }) => {
+  const [reportState, setReportState] = useState({
+    type: "RUN_RED",
+  });
   const [
     reportEncounterFn,
     { error: mutationError, data: mutationData },
   ] = useMutation(mutations.REPORT_ENCOUNTER);
-  const [reportState, setReportState] = useState({
-    type: "RUN_RED",
-  });
-
+  const { lat, lng, error, getPosition } = usePosition();
+  const isDisabled = lat === null && lng === null;
   return (
     <FormStyles.Container
       onSubmit={e => {
@@ -39,7 +39,17 @@ export const Form = ({ options }) => {
           );
         })}
       </FormStyles.StyledSelect>
-      <FormStyles.Button>Click to report</FormStyles.Button>
+      <FormStyles.Button disabled={isDisabled}>
+        Click to report
+      </FormStyles.Button>
+      <FormStyles.Button
+        onClick={e => {
+          e.preventDefault();
+          e.stopPropagation();
+          getPosition();
+        }}>
+        Get device's location
+      </FormStyles.Button>
     </FormStyles.Container>
   );
 };
