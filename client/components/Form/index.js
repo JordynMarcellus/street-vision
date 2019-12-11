@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/react-hooks";
+import { Button } from "grommet";
 import * as FormStyles from "./styles";
 import * as mutations from "../../state/mutations";
 import { usePosition } from "../../state/usePosition";
@@ -11,8 +12,9 @@ export const Form = ({ options }) => {
     reportEncounterFn,
     { error: mutationError, data: mutationData },
   ] = useMutation(mutations.REPORT_ENCOUNTER);
-  const { lat, lng, error, getPosition } = usePosition();
+  const { lat, lng, error, isLoading, getPosition } = usePosition();
   const isDisabled = lat === null && lng === null;
+  console.log(isLoading);
   return (
     <FormStyles.Container
       onSubmit={e => {
@@ -42,14 +44,14 @@ export const Form = ({ options }) => {
       <FormStyles.Button disabled={isDisabled}>
         Click to report
       </FormStyles.Button>
-      <FormStyles.Button
+      <Button
         onClick={e => {
           e.preventDefault();
           e.stopPropagation();
           getPosition();
         }}>
         Get device's location
-      </FormStyles.Button>
+      </Button>
     </FormStyles.Container>
   );
 };

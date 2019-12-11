@@ -1,7 +1,4 @@
-import { useState, useEffect } from "react";
-
-// Is this the right kind of hook?
-// NEED
+import { useState } from "react";
 
 const promisifiedGeoLocation = () =>
   new Promise((resolve, reject) => {
@@ -15,6 +12,7 @@ export const usePosition = () => {
     lat: null,
     lng: null,
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const onChange = ({ coords }) => {
@@ -29,13 +27,18 @@ export const usePosition = () => {
   };
 
   const getPosition = async () => {
+    setIsLoading(true);
     const deviceGeoLocation = navigator.geolocation;
+
     if (!deviceGeoLocation) {
       return setError("Cannot access geolocation");
     }
     await promisifiedGeoLocation()
-      .then(({ coords }) => onChange({ coords }))
+      .then(({ coords }) => {
+        onChange({ coords });
+        setIsLoading(false);
+      })
       .catch(error => onError(error));
   };
-  return { ...position, getPosition, error };
+  return { ...position, getPosition, isLoading, error };
 };
